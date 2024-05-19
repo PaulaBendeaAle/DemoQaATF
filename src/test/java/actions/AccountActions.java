@@ -22,7 +22,6 @@ public class AccountActions {
         Response response = accountService.createAccount(requestAccount);
         Assert.assertEquals(response.getStatusCode(), ResponseStatus.SC_CREATED);
         ResponseAccountSuccess responseAccountBody = response.body().as(ResponseAccountSuccess.class);
-        System.out.println(responseAccountBody.getUsername());
         Assert.assertEquals(responseAccountBody.getUsername(), requestAccount.getUserName());
         return responseAccountBody;
     }
