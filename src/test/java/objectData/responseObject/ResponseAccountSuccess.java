@@ -1,28 +1,39 @@
 package objectData.responseObject;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import objectData.BookObject;
+import lombok.Getter;
+import objectData.responseObject.modelObject.ResponseBookObject;
+import org.testng.Assert;
 
 import java.util.List;
 
-public class ResponseAccountSuccess {
+@Getter
+public class ResponseAccountSuccess implements ResponseNotNull {
 
     @JsonProperty("userID")
     private String userID;
     @JsonProperty("username")
     private String username;
     @JsonProperty("books")
-    private List<BookObject> books;
+    private List<ResponseBookObject> books;
 
-    public String getUserID() {
-        return userID;
+    @Override
+    public void validateNotNullFields() {
+        Assert.assertNotNull(userID);
+        Assert.assertNotNull(username);
+        for (ResponseBookObject responseBookObject : books){
+            responseBookObject.validateNotNullFields();
+        }
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public List<BookObject> getBooks() {
-        return books;
+    public void validateBookPresence(String book){
+        boolean checkBookPresence = false;
+        for(ResponseBookObject responseBookObject : books){
+            if(responseBookObject.getIsbn().equals(book)){
+                checkBookPresence = true;
+                break;
+            }
+        }
+        Assert.assertTrue(checkBookPresence);
     }
 }

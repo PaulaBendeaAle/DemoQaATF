@@ -12,7 +12,7 @@ import service.serviceImplementation.AccountServiceImpl;
 
 public class AccountActions {
 
-    private AccountServiceImpl accountService;
+    private final AccountServiceImpl accountService;
 
     public AccountActions() {
         accountService = new AccountServiceImpl();
@@ -21,7 +21,9 @@ public class AccountActions {
     public ResponseAccountSuccess createNewAccount(RequestAccount requestAccount) {
         Response response = accountService.createAccount(requestAccount);
         Assert.assertEquals(response.getStatusCode(), ResponseStatus.SC_CREATED);
+
         ResponseAccountSuccess responseAccountBody = response.body().as(ResponseAccountSuccess.class);
+        responseAccountBody.validateNotNullFields();
         Assert.assertEquals(responseAccountBody.getUsername(), requestAccount.getUserName());
         return responseAccountBody;
     }
@@ -29,7 +31,9 @@ public class AccountActions {
     public ResponseTokenSuccess generateToken(RequestAccount requestAccount) {
         Response response = accountService.generateAccountToken(requestAccount);
         Assert.assertEquals(response.getStatusCode(), ResponseStatus.SC_OK);
+
         ResponseTokenSuccess responseTokenSuccess = response.body().as(ResponseTokenSuccess.class);
+        responseTokenSuccess.validateNotNullFields();
         Assert.assertEquals(responseTokenSuccess.getStatus(), "Success");
         Assert.assertEquals(responseTokenSuccess.getResult(), "User authorized successfully.");
         return responseTokenSuccess;
@@ -39,10 +43,12 @@ public class AccountActions {
         Response response = accountService.getSpecificAccount(token, userId);
         if (response.getStatusCode() == ResponseStatus.SC_OK) {
             Assert.assertEquals(response.getStatusCode(), ResponseStatus.SC_OK);
+
             ResponseAccountGetSuccess responseAccountGetSuccess = response.body().as(ResponseAccountGetSuccess.class);
             Assert.assertEquals(responseAccountGetSuccess.getUsername(), requestAccountBody.getUserName());
         } else {
             Assert.assertEquals(response.getStatusCode(), ResponseStatus.SC_UNAUTHORIZED);
+
             ResponseAccountGetFailed responseAccountGetFailed = response.body().as(ResponseAccountGetFailed.class);
             Assert.assertEquals(responseAccountGetFailed.getCode(), "1207");
             Assert.assertEquals(responseAccountGetFailed.getMessage(), "User not found!");

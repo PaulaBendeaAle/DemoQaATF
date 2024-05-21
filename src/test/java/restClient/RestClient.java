@@ -2,6 +2,8 @@ package restClient;
 
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import xmlFile.GenerateXml;
+import xmlFile.xmlNode.Configuration;
 
 public class RestClient {
 
@@ -11,22 +13,22 @@ public class RestClient {
     // 2. Metoda care returneaza un raspuns pe baza configurarilor de la client
 
     private RequestSpecification prepareClient(RequestSpecification requestSpecification) {
+//        Configuration configuration = GenerateXml.createConfig(Configuration.class);
+
+//        requestSpecification.baseUri(configuration.backendConfig.baseURL);
+//        requestSpecification.contentType(configuration.backendConfig.contentType);
         requestSpecification.baseUri("https://demoqa.com/");
         requestSpecification.contentType("application/json");
         return requestSpecification;
     }
 
     public Response performRequest(String requestType, RequestSpecification requestSpecification, String endPoint) {
-        switch (requestType) {
-            case RequestType.REQUEST_POST:
-                return prepareClient(requestSpecification).post(endPoint);
-            case RequestType.REQUEST_PUT:
-                return prepareClient(requestSpecification).put(endPoint);
-            case RequestType.REQUEST_GET:
-                return prepareClient(requestSpecification).get(endPoint);
-            case RequestType.REQUEST_DELETE:
-                return prepareClient(requestSpecification).delete(endPoint);
-        }
-        return null;
+        return switch (requestType) {
+            case RequestType.REQUEST_POST -> prepareClient(requestSpecification).post(endPoint);
+            case RequestType.REQUEST_PUT -> prepareClient(requestSpecification).put(endPoint);
+            case RequestType.REQUEST_GET -> prepareClient(requestSpecification).get(endPoint);
+            case RequestType.REQUEST_DELETE -> prepareClient(requestSpecification).delete(endPoint);
+            default -> null;
+        };
     }
 }

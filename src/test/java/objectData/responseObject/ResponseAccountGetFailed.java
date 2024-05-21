@@ -1,7 +1,9 @@
 package objectData.responseObject;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 
+@Getter
 public class ResponseAccountGetFailed {
 
     @JsonProperty("code")
@@ -9,11 +11,4 @@ public class ResponseAccountGetFailed {
     @JsonProperty("message")
     private String message;
 
-    public String getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 }

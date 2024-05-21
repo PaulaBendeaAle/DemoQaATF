@@ -4,7 +4,4 @@ import service.CommonApiService;
 
 public class AccountApiService extends CommonApiService {
 
-
-
-
 }

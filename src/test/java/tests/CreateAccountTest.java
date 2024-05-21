@@ -1,13 +1,16 @@
 package tests;
 
 import actions.AccountActions;
+import extentUtility.ExtentUtility;
+import extentUtility.ReportStep;
+import hooks.Hooks;
 import objectData.requestObject.RequestAccount;
 import objectData.responseObject.ResponseAccountSuccess;
 import objectData.responseObject.ResponseTokenSuccess;
 import org.testng.annotations.Test;
 import propertyUtility.PropertyUtility;
 
-public class CreateAccountTest {
+public class CreateAccountTest extends Hooks {
 
     public String userId;
     public RequestAccount requestAccountBody;
@@ -18,22 +21,27 @@ public class CreateAccountTest {
     public void testMethod() {
         System.out.println("Step 1: create new account");
         createAccount();
+        ExtentUtility.attachReportLog(ReportStep.PASS_STEP, "The user creates a new account with success");
         System.out.println();
 
         System.out.println("Step 2: generate new token");
         generateToken();
+        ExtentUtility.attachReportLog(ReportStep.PASS_STEP, "The user generates a token for new account");
         System.out.println();
 
         System.out.println("Step 3: get new Account");
         getSpecificAccount();
+        ExtentUtility.attachReportLog(ReportStep.PASS_STEP, "The user validates the presence of new account");
         System.out.println();
 
         System.out.println("Step 4: delete specific Account");
         deleteSpecificAccount();
+        ExtentUtility.attachReportLog(ReportStep.PASS_STEP, "The user deletes the new account");
         System.out.println();
 
         System.out.println("Step 5: get specific account after delete");
         getSpecificAccount();
+        ExtentUtility.attachReportLog(ReportStep.PASS_STEP, "The user validates the account is deleted");
         System.out.println();
     }
 
@@ -42,7 +50,7 @@ public class CreateAccountTest {
         accountActions = new AccountActions(); //instantiaza clasa de actiuni necesare
 
         //pregateste body-ul in functie de fisierul JSON pe care il am
-        PropertyUtility propertyUtility = new PropertyUtility("requestData/CreateAccountData");
+        propertyUtility = new PropertyUtility("requestData/createAccountData");
         requestAccountBody = new RequestAccount(propertyUtility.getAllData());
 
         // layer 3 de account actions care le triggeruieste pe cele din layer 2 si 1 si returneaza tipul de obiect specific

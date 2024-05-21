@@ -1,9 +1,10 @@
 package objectData.requestObject;
 
-import objectData.RequestPreparation;
+import lombok.Data;
 
 import java.util.HashMap;
 
+@Data
 public class RequestAccount implements RequestPreparation {
 
     private String userName;
@@ -13,32 +14,12 @@ public class RequestAccount implements RequestPreparation {
         prepareObject(testData);
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     @Override
     public void prepareObject(HashMap<String, String> testData) {
         for (String key : testData.keySet()) {
             switch (key) {
-                case "userName":
-                    setUserName(testData.get(key));
-                    break;
-                case "password":
-                    setPassword(testData.get(key));
-                    break;
+                case "userName" -> setUserName(testData.get(key));
+                case "password" -> setPassword(testData.get(key));
             }
 
         }
